@@ -1,0 +1,483 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div id="header">
+
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>열려라 참깨</title>
+    <style type="text/css">
+      #admin {
+
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src='/team138/js/TweenMax.min.js'></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/header.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/bootstrap.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/login_layer.css'>
+  </head>
+  <body>
+  <div id="login_wrap_back" class="login_wrap_back" style="width:100%;"></div>
+  <div id="login_wrap" class="login_wrap">
+    <div class="login_layer">
+      <div class="login_logo">
+        <img src="/team138/images/auth/login_logobig.jpg" alt="" />
+      </div>
+
+      <div id="login_frm" class="login_frm" >
+        <div class="input_box email_input_box">
+          <label>아이디</label>
+          <input type="email" id="login_email" class="login_email" name="memberEmail" placeholder="이메일"
+                 required oninvalid="this.setCustomValidity('가입 하신 이메일을 입력해주세요.')"
+                 oninput="this.setCustomValidity('')"/>
+        </div>
+
+        <div class="input_box password_input_box">
+          <label>비밀번호</label>
+          <input type="password" id="login_password" class="login_password" name="memberPasswd"  placeholder="비밀번호"
+                 required oninvalid="this.setCustomValidity('비밀번호를 입력해주세요.')"
+                 oninput="this.setCustomValidity('')"/>
+        </div>
+
+        <div class="btns">
+          <button type="button" id="login_sbmt_btn">로그인</button>
+        </div>
+      </div>
+      <hr class="hr" />
+
+      <div class="login_box">
+        <div class="social_btns">
+          <a href="#"><img alt="구글로그인" src="/team138/images/auth/google.jpg" width="48"></a>
+          <a href="#"><img alt="카카오로그인" src="/team138/images/auth/cacao.jpg" width="48"></a>
+        </div>
+        <div class="memb_info_find">
+          <a href="/team138/member/findEmail">아이디 찾기</a>
+          <a href="/team138/member/findPwView">비밀번호 찾기</a>
+          <a href="/team138/member/agree">회원이 아니세요?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+
+      $('.login_layer_open').click(function () {
+
+        var animation = new TimelineLite();
+        $("html").css("overflow", "hidden");
+        animation.to('#m_main_menu', 0.2, { css: { className: '-=active', display: 'none' }, delay: 0, ease: Linear.easeNone });
+
+        $("body").css("overflow", "hidden");
+        $("#login_wrap_back").css("display", "block");
+        $("#login_wrap").css("display", "block");
+        $(".container").addClass("not_ie");
+        $("#login_wrap_back").addClass("not_ie");
+
+
+
+      });
+
+      $('.login_layer_close').click(function () {
+
+        $("html").css("overflow", "auto");
+        $('body').css("overflow", "auto");
+        $("#login_layer_back").css("display", "none");
+        $("#login_wrap").css("display", "none");
+        $(".container").removeClass("not_ie");
+        $("#login_wrap_back").removeClass("not_ie");
+
+
+      });
+
+      $('#login_wrap_back').click(function () {
+
+        $("html").css("overflow", "auto");
+        $('body').css("overflow", "auto");
+        $("#login_wrap_back").css("display", "none");
+        $("#login_wrap").css("display", "none");
+        $(".container").removeClass("not_ie");
+        $("#login_wrap_back").removeClass("not_ie");
+
+
+      });
+    });
+  </script>
+
+
+  <script>
+    $("#login_frm").on("keydown",function(key){
+      if(key.keyCode==13) {
+        var email=$("#login_email").val();
+        var password=$("#login_password").val();
+
+        if(email=="") {
+          alert("이메일을 입력해 주세요.");
+          return;
+        }
+
+        if(password=="") {
+          alert("비밀번호를 입력해 주세요.");
+          return;
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/team138/member/login_add",
+
+          data: JSON.stringify({"memberEmail":email, "memberPasswd":password}),
+          contentType: "application/json",
+          dataType: "json",
+          success: function(resultMap) {
+            if(resultMap.result=="fail") {
+              alert(resultMap.errorMessage);
+
+            } else {
+              alert("로그인 성공");
+              document.location.reload();
+            }
+          },
+          error: function(xhr) {
+            alert("에러코드(login) = "+xhr.status);
+          }
+        });
+        return false;
+
+      }
+    });
+
+    $("#login_sbmt_btn").on('click',function() {
+
+      var email=$("#login_email").val();
+      var password=$("#login_password").val();
+
+      if(email=="") {
+        alert("이메일을 입력해 주세요.");
+        return;
+      }
+
+      if(password=="") {
+        alert("비밀번호를 입력해 주세요.");
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/team138/member/login_add",
+
+        data: JSON.stringify({"memberEmail":email, "memberPasswd":password}),
+        contentType: "application/json",
+        dataType: "json",
+        success: function(resultMap) {
+          if(resultMap.result=="fail") {
+            alert(resultMap.errorMessage);
+
+          } else {
+            alert("로그인 성공");
+            document.location.reload();
+          }
+        },
+        error: function(xhr) {
+          alert("에러코드(login) = "+xhr.status);
+        }
+      });
+      return false;
+    });
+
+  </script>
+
+  <div id="m_main_menu" class="m_main_menu">
+
+
+    <div id="m_main_menu_close_btn" class="m_main_menu_close_btn">
+      <a class="m_login login_layer_open" href="javascript:void(0);">
+        <img src="/team138/images/header/m_login.png" alt="" />
+      </a>
+      <a class="m_join" href="#">
+        회원이 아니세요?
+      </a>
+      <img src="/team138/images/header/m_close.png" alt="" />
+    </div>
+
+
+
+
+
+    <nav>
+      <ul>
+        <li><a href="#"><span>홈</span></a></li>
+        <li><a href="/team138/cafe"><span>카페</span></a></li>
+        <li><a href="/team138/theme"><span>테마</span></a></li>
+        <li><a href="/team138/reserve"><span>예약</span></a></li>
+        <li><a href="/team138/chat"><span>채팅</span></a></li>
+        <li><a href="/team138/board"><span>커뮤니티</span></a></li>
+
+      </ul>
+    </nav>
+  </div>
+  <header id="header" class="header">
+    <div class="header_wrap">
+      <h1 class="logo">
+        <a href="/team138/main">
+          <img src='/team138/images/header/logo_version2.png' alt="" />
+        </a>
+      </h1>
+
+      <nav class="main_menu">
+        <ul class="depth1">
+          <li><a href="/team138/cafe">카페</a></li>
+          <li><a href="/team138/theme">테마</a></li>
+          <li><a href="/team138/chat">채팅</a></li>
+          <li><a href="/team138/reserve">예약</a></li>
+          <li><a href="/team138/board">커뮤니티</a></li>
+
+        </ul>
+      </nav>
+
+      <div class="header_util">
+
+
+        <div id="login_btn" class="login">
+          <a class="login_layer_open" href="javascript:void(0);">
+            <img class="login_btn_mouse_leave" src='/team138/images/header/login.png' alt="" />
+            <img class="login_btn_mouse_over" src="/team138/images/header/login_hover.png" alt="" />
+          </a>
+        </div>
+
+        <div class="join">
+          <a href="/team138/member/agree">회원이 아니세요?</a>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <div class="m_header_wrap"> <!-- 화면크기 줄였을 때만 햄버거 보여야됨 display none으로 설정  -->
+      <div id="m_main_menu_btn" class="m_main_menu_btn">
+        <img src="/team138/images/header/hamburger.png" alt="" />
+      </div>
+    </div>
+
+    <script>
+      $('#m_main_menu_btn').click(function () {
+        var animation = new TimelineLite();
+
+        $('#m_main_menu').show();
+        $("html").css("overflow", "hidden");
+        animation.to('#m_main_menu', 0.2, { css: { className: '+=active', display: 'block' }, delay: 0, ease: Linear.easeNone });
+      });
+
+      $('#m_main_menu_close_btn').click(function () {
+        var animation = new TimelineLite();
+
+        $("html").css("overflow", "initial");
+        animation.to('#m_main_menu', 0.2, { css: { className: '-=active', display: 'none' }, delay: 0, ease: Linear.easeNone });
+      });
+    </script>
+
+    <script>
+      $('#login_btn').hover(function () {
+        $('.login_btn_mouse_leave').hide();
+        $('.login_btn_mouse_over').show();
+      }, function () {
+        $('.login_btn_mouse_leave').show();
+        $('.login_btn_mouse_over').hide();
+      });
+
+      $('#logout_btn').hover(function () {
+        $('.logout_btn_mouse_leave').hide();
+        $('.logout_btn_mouse_over').show();
+      }, function () {
+        $('.logout_btn_mouse_leave').show();
+        $('.logout_btn_mouse_over').hide();
+      });
+    </script>
+  </header>
+  </body>
+  </html>
+</div>
+
+<div id="content">
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/bootstrap.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/owl.carousel.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/owl.theme.default.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/slider.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/login_layer.css'>
+
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/team138/js/bootstrap.js"></script>
+    <script src='/team138/js/TweenMax.min.js'></script>
+    <script src='/team138/js/owl.carousel.js'></script>
+  </head>
+  <body>
+  <div id="wrapper">
+    <div class="main_slider_wrap">
+      <div id="main_slider" class="owl-carousel owl-theme slider">
+        <div class="page">
+          <div class="page_ratio">
+            <div class="page_contents">
+              <div class="layer_element layer_element_1">
+                <img src="/team138/images/slider/main_slider_1.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page">
+          <div class="page_ratio">
+            <div class="page_contents">
+              <div class="layer_element layer_element_1 page_2">
+                <div class="img_w_2560" style="background-image:url(/team138/images/slider/main_slider_2.png);">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $('#main_slider').owlCarousel({
+      items: 1,
+      nav: true,
+      dots:true,
+      dotsEach:true, /* dots 항상 표시 */
+
+      loop:true,
+      singleItem: true,
+
+      navText : ['<img src="/team138/images/slider/prev.png" alt="" />','<img src="/team138/images/slider/next.png" alt="" />'],
+      mouseDrag:false
+    });
+
+  </script>
+  </body>
+  </html>
+</div>
+
+<div id="footer">
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>열려라 참깨</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='/team138/css/footer.css'>
+  </head>
+  <body>
+  <footer class="footer">
+    <div class="footer_wrap">
+      <div class="f_logo">
+        <a href="index.html">
+          <img src="/team138/images/footer/logo_ver2.png" alt="" />
+        </a>
+      </div>
+
+      <div class="f_info">
+        <div class="policy">
+          <div class="company_name">
+            <p><span>Team 138</span></p>
+          </div>
+
+          <div class="policies">
+            <a href="#" class="privacy">
+              개인정보 처리방침
+            </a>
+
+            <a href="#" class="biz_contact">
+              사업자 혜택
+            </a>
+
+            <a href="#">
+              창업&외주 문의
+            </a>
+
+          </div>
+        </div>
+
+        <div class="company">
+          <div class="contact">
+            <p class="ceo">
+              <span class="tag">코드네임</span>
+              <span class="colon">&nbsp;:&nbsp;</span>
+              <span class="value">팀138</span>
+            </p>
+
+            <p class="pipe"><span>&nbsp;|&nbsp;</span></p>
+
+            <p class="biz_numb">
+              <span class="tag">사업자등록번호</span>
+              <span class="colon">&nbsp;:&nbsp;</span>
+              <span class="value">000-00-00000</span>
+            </p>
+
+            <p class="pipe"><span>&nbsp;|&nbsp;</span></p>
+
+            <p class="center">
+              <span class="tag">고객센터</span>
+              <span class="colon">&nbsp;:&nbsp;</span>
+              <span class="value">02-0000-0000</span>
+            </p>
+          </div>
+
+          <div class="copyright">
+            <p class="email">
+              <span class="tag">메일</span>
+              <span class="colon">&nbsp;:&nbsp;</span>
+              <span class="value">team138@itwill.xyz</span>
+            </p>
+
+            <p class="pipe"><span>&nbsp;|&nbsp;</span></p>
+
+            <p class="loc">
+              <span class="tag">주소</span>
+              <span class="colon">&nbsp;:&nbsp;</span>
+              <span class="value">서울특별시 강남역</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="app">
+          <div class="android">
+            <a href="#" target="_black">
+              <img src="/team138/images/footer/googlestore.png" alt="" />
+            </a>
+          </div>
+
+          <div class="ios">
+            <a href="#" target="_black">
+              <img src="/team138/images/footer/appstore.png" alt="" />
+            </a>
+          </div>
+
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </body>
+  </html>
+</div>
+</body>
+</html>
